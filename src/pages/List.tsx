@@ -4,7 +4,7 @@ import QuestionCard from '../components/QuestionCard'
 
 const rawQuestionList = [
   {
-    id: 'q1',
+    _id: 'q1',
     title: '问卷1',
     isPublished: false,
     isStar: false,
@@ -12,7 +12,7 @@ const rawQuestionList = [
     createAt: '3月10日 13:23',
   },
   {
-    id: 'q2',
+    _id: 'q2',
     title: '问卷2',
     isPublished: false,
     isStar: true,
@@ -20,7 +20,7 @@ const rawQuestionList = [
     createAt: '3月11日 13:23',
   },
   {
-    id: 'q3',
+    _id: 'q3',
     title: '问卷3',
     isPublished: false,
     isStar: false,
@@ -28,7 +28,7 @@ const rawQuestionList = [
     createAt: '4月10日 13:23',
   },
   {
-    id: 'q4',
+    _id: 'q4',
     title: '问卷4',
     isPublished: true,
     isStar: true,
@@ -40,7 +40,21 @@ const List: FC = () => {
   const [questionList, setQuestionList] = useState(rawQuestionList)
   return (
     <>
-      <p>List</p>
+      {/* 上 */}
+      <div className={styles.header}>
+        <div className={styles.left}>
+          <h3>我的问卷</h3>
+        </div>
+        <div className={styles.right}>（搜索）</div>
+      </div>
+      {/* 中 */}
+      <div className={styles.content}>
+        {questionList.map(item => {
+          return <QuestionCard key={item._id} {...item} />
+        })}
+      </div>
+      {/* 下 */}
+      <div className={styles.footer}>footer</div>
     </>
   )
 }

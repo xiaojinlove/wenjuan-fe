@@ -1,10 +1,19 @@
 import React, { FC } from 'react'
 import styles from './QuestionCard.module.scss'
 
-const QuestionCard: FC = () => {
+type PropsType = {
+  _id: string
+  title: string
+  isPublished: boolean
+  isStar: boolean
+  answerCount: number
+  createAt: string
+}
+const QuestionCard: FC<PropsType> = (props: PropsType) => {
+  const { _id } = props
   return (
     <>
-      <p>QuestionCard</p>
+      <p>QuestionCard {_id}</p>
     </>
   )
 }
