@@ -5,7 +5,6 @@ import {
   CopyOutlined,
   DeleteOutlined,
   EditOutlined,
-  ExclamationCircleFilled,
   ExclamationCircleOutlined,
   LineChartOutlined,
   StarOutlined,

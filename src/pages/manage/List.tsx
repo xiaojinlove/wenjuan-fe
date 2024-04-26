@@ -3,7 +3,9 @@ import styles from './common.module.scss'
 import QuestionCard from '../../components/QuestionCard'
 //import { useSearchParams } from 'react-router-dom'
 import { useTitle } from 'ahooks'
+import { Typography } from 'antd'
 
+const { Title } = Typography
 const rawQuestionList = [
   {
     _id: 'q1',
@@ -48,7 +50,7 @@ const List: FC = () => {
       {/* 上 */}
       <div className={styles.header}>
         <div className={styles.left}>
-          <h3>我的问卷</h3>
+          <Title level={3}>我的问卷</Title>
         </div>
         <div className={styles.right}>（搜索）</div>
       </div>
