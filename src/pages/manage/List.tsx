@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import styles from './List.module.scss'
+import styles from './common.module.scss'
 import QuestionCard from '../../components/QuestionCard'
 //import { useSearchParams } from 'react-router-dom'
 import { useTitle } from 'ahooks'
@@ -54,12 +54,14 @@ const List: FC = () => {
       </div>
       {/* 中 */}
       <div className={styles.content}>
-        {questionList.map(item => {
-          return <QuestionCard key={item._id} {...item} />
-        })}
+        {/* 问卷列表 */}
+        {questionList.length > 0 &&
+          questionList.map(item => {
+            return <QuestionCard key={item._id} {...item} />
+          })}
       </div>
       {/* 下 */}
-      <div className={styles.footer}>list page footer</div>
+      <div className={styles.footer}>loadMore...</div>
     </>
   )
 }
