@@ -4,6 +4,7 @@ import styles from './common.module.scss'
 import { useTitle } from 'ahooks'
 import { Empty, Typography, Table, Tag, Space, Button, Modal, message } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
+import ListSearch from '../../components/ListSearch'
 
 const { Title } = Typography
 const rawQuestionList = [
@@ -110,7 +111,10 @@ const Trash: FC = () => {
         <div className={styles.left}>
           <Title level={3}>回收站</Title>
         </div>
-        <div className={styles.right}>（搜索）{JSON.stringify(selectedIds)}</div>
+        <div className={styles.right}>
+          <ListSearch />
+          {JSON.stringify(selectedIds)}
+        </div>
       </div>
       {/* 中 */}
       <div className={styles.content}>
