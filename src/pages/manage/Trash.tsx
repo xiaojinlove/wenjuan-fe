@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react'
 import styles from './common.module.scss'
-import QuestionCard from '../../components/QuestionCard'
 //import { useSearchParams } from 'react-router-dom'
 import { useTitle } from 'ahooks'
-import { Empty, Typography, Table, Tag } from 'antd'
+import { Empty, Typography, Table, Tag, Space, Button, Modal, message } from 'antd'
+import { ExclamationCircleFilled } from '@ant-design/icons'
 
 const { Title } = Typography
 const rawQuestionList = [
@@ -62,11 +62,47 @@ const tableColumns = [
     dataIndex: 'createAt',
   },
 ]
+const { confirm } = Modal
 const Trash: FC = () => {
   useTitle('小星问卷 - 我的问卷')
   // const [searchParams] = useSearchParams()
   // console.log('keyword', searchParams)
   const [questionList, setQuestionList] = useState(rawQuestionList)
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  function del() {
+    confirm({
+      title: '确认彻底删除该问卷？',
+      icon: <ExclamationCircleFilled />,
+      content: '删除以后不可以找回',
+      onOk: () => message.success(`删除 ${JSON.stringify(selectedIds)}`),
+    })
+  }
+  const TableElem = (
+    <>
+      <div style={{ marginBottom: '16px' }}>
+        <Space>
+          <Button type="primary" disabled={selectedIds.length === 0}>
+            恢复
+          </Button>
+          <Button danger disabled={selectedIds.length === 0} onClick={del}>
+            彻底删除
+          </Button>
+        </Space>
+      </div>
+      <Table
+        dataSource={questionList}
+        columns={tableColumns}
+        pagination={false}
+        rowKey={q => q._id}
+        rowSelection={{
+          type: 'checkbox',
+          onChange: selectedRowKeys => {
+            setSelectedIds(selectedRowKeys as string[])
+          },
+        }}
+      />
+    </>
+  )
   return (
     <>
       {/* 上 */}
@@ -74,15 +110,13 @@ const Trash: FC = () => {
         <div className={styles.left}>
           <Title level={3}>回收站</Title>
         </div>
-        <div className={styles.right}>（搜索）</div>
+        <div className={styles.right}>（搜索）{JSON.stringify(selectedIds)}</div>
       </div>
       {/* 中 */}
       <div className={styles.content}>
         {/* 问卷列表 */}
         {questionList.length === 0 && <Empty description="暂无数据" />}
-        {questionList.length > 0 && (
-          <Table dataSource={questionList} columns={tableColumns} pagination={false} />
-        )}
+        {questionList.length > 0 && TableElem}
       </div>
       {/* 下 */}
       <div className={styles.footer}>分页</div>
