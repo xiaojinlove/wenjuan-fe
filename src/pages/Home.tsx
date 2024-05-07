@@ -1,11 +1,20 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Typography } from 'antd'
 import { MANAGE_INDEX_PATHNAME } from '../router'
 import styles from './Home.module.scss'
 
+import '../_mock'
+import axios from 'axios'
+
 const { Title, Paragraph } = Typography
 const Home: FC = () => {
+  useEffect(() => {
+    // fetch('/api/test')
+    //   .then(res => console.log(res.json()))
+    //   .then(data => console.log('fetch data', data))
+    axios.get('/api/test').then(res => console.log('axios res', res))
+  }, [])
   const navigate = useNavigate()
   // function handleLogin() {
   //   // navigate('/login?b=20')
