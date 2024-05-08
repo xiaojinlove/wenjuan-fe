@@ -4,7 +4,7 @@ import { Button, Typography } from 'antd'
 import { MANAGE_INDEX_PATHNAME } from '../router'
 import styles from './Home.module.scss'
 
-import '../_mock'
+//import '../_mock'
 import axios from 'axios'
 
 const { Title, Paragraph } = Typography
@@ -13,7 +13,7 @@ const Home: FC = () => {
     // fetch('/api/test')
     //   .then(res => console.log(res.json()))
     //   .then(data => console.log('fetch data', data))
-    axios.get('/api/test').then(res => console.log('axios res', res))
+    axios.get('/api/test').then(res => console.log('axios res', res.data))
   }, [])
   const navigate = useNavigate()
   // function handleLogin() {
