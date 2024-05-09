@@ -1,51 +1,32 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import styles from './common.module.scss'
 import QuestionCard from '../../components/QuestionCard'
 //import { useSearchParams } from 'react-router-dom'
-import { useTitle } from 'ahooks'
-import { Typography } from 'antd'
+import { useRequest, useTitle } from 'ahooks'
+import { Typography, Spin } from 'antd'
 import ListSearch from '../../components/ListSearch'
+import { getQuestionList } from '../../services/question'
 
 const { Title } = Typography
-const rawQuestionList = [
-  {
-    _id: 'q1',
-    title: '问卷1',
-    isPublished: false,
-    isStar: false,
-    answerCount: 5,
-    createAt: '3月10日 13:23',
-  },
-  {
-    _id: 'q2',
-    title: '问卷2',
-    isPublished: false,
-    isStar: true,
-    answerCount: 2,
-    createAt: '3月11日 13:23',
-  },
-  {
-    _id: 'q3',
-    title: '问卷3',
-    isPublished: false,
-    isStar: false,
-    answerCount: 7,
-    createAt: '4月10日 13:23',
-  },
-  {
-    _id: 'q4',
-    title: '问卷4',
-    isPublished: true,
-    isStar: true,
-    answerCount: 10,
-    createAt: '3月12日 13:23',
-  },
-]
+
 const List: FC = () => {
   useTitle('小星问卷 - 我的问卷')
   // const [searchParams] = useSearchParams()
   // console.log('keyword', searchParams)
-  const [questionList, setQuestionList] = useState(rawQuestionList)
+
+  // const [list, setList] = useState([])
+  // const [total, setTotal] = useState(0)
+  // useEffect(() => {
+  //   async function load() {
+  //     const data = await getQuestionList()
+  //     const { list = [], total = 0 } = data
+  //     setList(list)
+  //     setTotal(total)
+  //   }
+  //   load()
+  // }, [])
+  const { data = {}, loading } = useRequest(getQuestionList)
+  const { list = [], total = 0 } = data
   return (
     <>
       {/* 上 */}
@@ -59,9 +40,15 @@ const List: FC = () => {
       </div>
       {/* 中 */}
       <div className={styles.content}>
+        {loading && (
+          <div style={{ textAlign: 'center' }}>
+            <Spin />
+          </div>
+        )}
         {/* 问卷列表 */}
-        {questionList.length > 0 &&
-          questionList.map(item => {
+        {!loading &&
+          list.length > 0 &&
+          list.map((item: any) => {
             return <QuestionCard key={item._id} {...item} />
           })}
       </div>
