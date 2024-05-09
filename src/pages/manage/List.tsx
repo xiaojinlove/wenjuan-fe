@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import styles from './common.module.scss'
 import QuestionCard from '../../components/QuestionCard'
 //import { useSearchParams } from 'react-router-dom'
@@ -25,6 +25,12 @@ const List: FC = () => {
   //   }
   //   load()
   // }, [])
+
+  const [page, setpage] = useState(1)
+  const [list, setList] = useState([])
+  const [total, setTotal] = useState(0)
+  const haveMoreData = total > list.length
+
   const { data = {}, loading } = useLoadQuestionListData()
   const { list = [], total = 0 } = data
   return (
