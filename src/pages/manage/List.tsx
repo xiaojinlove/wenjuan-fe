@@ -2,10 +2,10 @@ import React, { FC } from 'react'
 import styles from './common.module.scss'
 import QuestionCard from '../../components/QuestionCard'
 //import { useSearchParams } from 'react-router-dom'
-import { useRequest, useTitle } from 'ahooks'
+import { useTitle } from 'ahooks'
 import { Typography, Spin } from 'antd'
 import ListSearch from '../../components/ListSearch'
-import { getQuestionList } from '../../services/question'
+import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 
 const { Title } = Typography
 
@@ -25,7 +25,7 @@ const List: FC = () => {
   //   }
   //   load()
   // }, [])
-  const { data = {}, loading } = useRequest(getQuestionList)
+  const { data = {}, loading } = useLoadQuestionListData()
   const { list = [], total = 0 } = data
   return (
     <>
