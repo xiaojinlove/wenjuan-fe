@@ -2,45 +2,13 @@ import React, { FC, useState } from 'react'
 import styles from './common.module.scss'
 //import { useSearchParams } from 'react-router-dom'
 import { useTitle } from 'ahooks'
-import { Empty, Typography, Table, Tag, Space, Button, Modal, message } from 'antd'
+import { Empty, Typography, Table, Tag, Space, Button, Modal, message, Spin } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import ListSearch from '../../components/ListSearch'
+import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 
 const { Title } = Typography
-const rawQuestionList = [
-  {
-    _id: 'q1',
-    title: '问卷1',
-    isPublished: false,
-    isStar: false,
-    answerCount: 5,
-    createAt: '3月10日 13:23',
-  },
-  {
-    _id: 'q2',
-    title: '问卷2',
-    isPublished: false,
-    isStar: true,
-    answerCount: 2,
-    createAt: '3月11日 13:23',
-  },
-  {
-    _id: 'q3',
-    title: '问卷3',
-    isPublished: false,
-    isStar: false,
-    answerCount: 7,
-    createAt: '4月10日 13:23',
-  },
-  {
-    _id: 'q4',
-    title: '问卷4',
-    isPublished: true,
-    isStar: true,
-    answerCount: 10,
-    createAt: '3月12日 13:23',
-  },
-]
+
 const tableColumns = [
   {
     title: '标题',
@@ -68,7 +36,8 @@ const Trash: FC = () => {
   useTitle('小星问卷 - 我的问卷')
   // const [searchParams] = useSearchParams()
   // console.log('keyword', searchParams)
-  const [questionList, setQuestionList] = useState(rawQuestionList)
+  const { data = {}, loading } = useLoadQuestionListData({ isDeleted: true })
+  const { list = [], total = 0 } = data
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   function del() {
     confirm({
@@ -91,7 +60,7 @@ const Trash: FC = () => {
         </Space>
       </div>
       <Table
-        dataSource={questionList}
+        dataSource={list}
         columns={tableColumns}
         pagination={false}
         rowKey={q => q._id}
@@ -118,9 +87,14 @@ const Trash: FC = () => {
       </div>
       {/* 中 */}
       <div className={styles.content}>
+        {loading && (
+          <div style={{ textAlign: 'center' }}>
+            <Spin />
+          </div>
+        )}
         {/* 问卷列表 */}
-        {questionList.length === 0 && <Empty description="暂无数据" />}
-        {questionList.length > 0 && TableElem}
+        {!loading && list.length === 0 && <Empty description="暂无数据" />}
+        {list.length > 0 && TableElem}
       </div>
       {/* 下 */}
       <div className={styles.footer}>分页</div>

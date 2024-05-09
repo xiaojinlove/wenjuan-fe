@@ -3,9 +3,8 @@ import type { ResDataType } from './ajax'
 
 type SearchOption = {
   keyword: string
-  //page
-  //pageSize
-  //isStar
+  isStar: boolean
+  isDeleted: boolean
 }
 //获取单个问卷信息
 export async function getQuestionService(id: string): Promise<ResDataType> {
