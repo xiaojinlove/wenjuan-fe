@@ -6,6 +6,7 @@ import { Empty, Typography, Table, Tag, Space, Button, Modal, message, Spin } fr
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import ListSearch from '../../components/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
+import ListPage from '../../components/ListPage'
 
 const { Title } = Typography
 
@@ -97,7 +98,9 @@ const Trash: FC = () => {
         {list.length > 0 && TableElem}
       </div>
       {/* 下 */}
-      <div className={styles.footer}>分页</div>
+      <div className={styles.footer}>
+        <ListPage total={total} />
+      </div>
     </>
   )
 }

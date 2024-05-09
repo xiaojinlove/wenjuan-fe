@@ -6,6 +6,7 @@ import { useTitle } from 'ahooks'
 import { Empty, Spin, Typography } from 'antd'
 import ListSearch from '../../components/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
+import ListPage from '../../components/ListPage'
 
 const { Title } = Typography
 
@@ -41,7 +42,9 @@ const Star: FC = () => {
           })}
       </div>
       {/* 下 */}
-      <div className={styles.footer}>分页</div>
+      <div className={styles.footer}>
+        <ListPage total={total} />
+      </div>
     </>
   )
 }
