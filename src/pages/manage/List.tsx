@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState, useMemo } from 'react'
 import styles from './common.module.scss'
 import QuestionCard from '../../components/QuestionCard'
 //import { useSearchParams } from 'react-router-dom'
 import { useDebounceFn, useRequest, useTitle } from 'ahooks'
-import { Typography, Spin } from 'antd'
+import { Typography, Spin, Empty } from 'antd'
 import ListSearch from '../../components/ListSearch'
 import { useSearchParams } from 'react-router-dom'
 import { getQuestionList } from '../../services/question'
@@ -27,6 +27,7 @@ const List: FC = () => {
   //   }
   //   load()
   // }, [])
+  const [started, setStarted] = useState(false)
   const [page, setPage] = useState(1)
   const [list, setList] = useState([])
   const [total, setTotal] = useState(0)
@@ -35,13 +36,21 @@ const List: FC = () => {
   //   console.log('try load more...')
   // }
   const [searchParams] = useSearchParams()
+  const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || ''
+  //keyword 变化时，重置信息
+  useEffect(() => {
+    setStarted(false)
+    setPage(1)
+    setList([])
+    setTotal(0)
+  }, [keyword])
   //真正加载
   const { run: load, loading } = useRequest(
     async () => {
       const data = await getQuestionList({
         page,
         pageSize: LIST_PAGE_SIZE,
-        keyword: searchParams.get(LIST_SEARCH_PARAM_KEY) || '',
+        keyword,
       })
       return data
     },
@@ -66,6 +75,7 @@ const List: FC = () => {
       const { bottom } = domRect
       if (bottom <= document.body.clientHeight) {
         load()
+        setStarted(true)
       }
     },
     {
@@ -86,6 +96,12 @@ const List: FC = () => {
     }
   }, [searchParams, haveMoreData])
 
+  const LoadMoreContentElem = useMemo(() => {
+    if (!started || loading) return <Spin />
+    if (total === 0) return <Empty description="暂无数据" />
+    if (!haveMoreData) return <span>没有更多了...</span>
+    return <span>开始加载下一页</span>
+  }, [started, loading, haveMoreData])
   return (
     <>
       {/* 上 */}
@@ -99,22 +115,15 @@ const List: FC = () => {
       </div>
       {/* 中 */}
       <div className={styles.content}>
-        {loading && (
-          <div style={{ textAlign: 'center' }}>
-            <Spin />
-          </div>
-        )}
         问卷列表
-        {!loading &&
-          list.length > 0 &&
+        {list.length > 0 &&
           list.map((item: any) => {
             return <QuestionCard key={item._id} {...item} />
           })}
-        <div style={{ height: '2000px' }}></div>
       </div>
       {/* 下 */}
       <div className={styles.footer}>
-        <div ref={containerRef}>loadMore...加载更多</div>
+        <div ref={containerRef}>{LoadMoreContentElem}</div>
       </div>
     </>
   )
