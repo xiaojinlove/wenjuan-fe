@@ -1,11 +1,10 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import styles from './common.module.scss'
 import QuestionCard from '../../components/QuestionCard'
 //import { useSearchParams } from 'react-router-dom'
 import { useDebounceFn, useTitle } from 'ahooks'
 import { Typography, Spin } from 'antd'
 import ListSearch from '../../components/ListSearch'
-import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 import { useSearchParams } from 'react-router-dom'
 
 const { Title } = Typography
@@ -26,7 +25,6 @@ const List: FC = () => {
   //   }
   //   load()
   // }, [])
-
   const [page, setpage] = useState(1)
   const [list, setList] = useState([])
   const [total, setTotal] = useState(0)
@@ -36,9 +34,17 @@ const List: FC = () => {
   // }
   const [searchParams] = useSearchParams()
   //触发加载，防抖
+  const containerRef = useRef<HTMLDivElement>(null)
   const { run: tryLoadMore } = useDebounceFn(
     () => {
-      console.log('try load more...')
+      const elem = containerRef.current
+      if (elem === null) return
+      const domRect = elem.getBoundingClientRect()
+      if (domRect === null) return
+      const { bottom } = domRect
+      if (bottom <= document.body.clientHeight) {
+        console.log('try load more...')
+      }
     },
     {
       wait: 1000,
@@ -46,7 +52,7 @@ const List: FC = () => {
   )
   //页面首次加载后和搜索关键词变化的时候会触发
   useEffect(() => {
-    tryLoadMore()
+    tryLoadMore() //加载第一页，初始化
   }, [searchParams])
   //当页面滚动时，触发加载
   useEffect(() => {
@@ -57,8 +63,7 @@ const List: FC = () => {
       window.removeEventListener('scroll', tryLoadMore)
     }
   }, [searchParams])
-  const { data = {}, loading } = useLoadQuestionListData()
-  const { list = [], total = 0 } = data
+
   return (
     <>
       {/* 上 */}
@@ -72,20 +77,27 @@ const List: FC = () => {
       </div>
       {/* 中 */}
       <div className={styles.content}>
-        {loading && (
+        {/* {loading && (
           <div style={{ textAlign: 'center' }}>
             <Spin />
           </div>
         )}
         {/* 问卷列表 */}
-        {!loading &&
+        {/* {!loading &&
           list.length > 0 &&
+          list.map((item: any) => {
+            return <QuestionCard key={item._id} {...item} />
+          })} */}
+        <div style={{ height: '2000px' }}></div>
+        {list.length > 0 &&
           list.map((item: any) => {
             return <QuestionCard key={item._id} {...item} />
           })}
       </div>
       {/* 下 */}
-      <div className={styles.footer}>loadMore...</div>
+      <div className={styles.footer}>
+        <div ref={containerRef}>loadMore...加载更多</div>
+      </div>
     </>
   )
 }
