@@ -7,7 +7,7 @@ import { ExclamationCircleFilled } from '@ant-design/icons'
 import ListSearch from '../../components/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 import ListPage from '../../components/ListPage'
-import { updateQuestionService } from '../../services/question'
+import { deleteQuestionsService, updateQuestionService } from '../../services/question'
 
 const { Title } = Typography
 
@@ -54,6 +54,19 @@ const Trash: FC = () => {
       onSuccess() {
         message.success('恢复成功')
         refresh()
+        setSelectedIds([])
+      },
+    }
+  )
+  //彻底删除
+  const { run: deleteQuestion } = useRequest(
+    async () => await deleteQuestionsService(selectedIds),
+    {
+      manual: true,
+      onSuccess() {
+        message.success(`删除 ${JSON.stringify(selectedIds)}`)
+        refresh()
+        setSelectedIds([])
       },
     }
   )
@@ -62,7 +75,7 @@ const Trash: FC = () => {
       title: '确认彻底删除该问卷？',
       icon: <ExclamationCircleFilled />,
       content: '删除以后不可以找回',
-      onOk: () => message.success(`删除 ${JSON.stringify(selectedIds)}`),
+      onOk: deleteQuestion,
     })
   }
   const TableElem = (
