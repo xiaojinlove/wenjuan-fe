@@ -1,12 +1,13 @@
 import React, { FC, useState } from 'react'
 import styles from './common.module.scss'
 //import { useSearchParams } from 'react-router-dom'
-import { useTitle } from 'ahooks'
+import { useRequest, useTitle } from 'ahooks'
 import { Empty, Typography, Table, Tag, Space, Button, Modal, message, Spin } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import ListSearch from '../../components/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 import ListPage from '../../components/ListPage'
+import { updateQuestionService } from '../../services/question'
 
 const { Title } = Typography
 
@@ -37,9 +38,25 @@ const Trash: FC = () => {
   useTitle('小星问卷 - 我的问卷')
   // const [searchParams] = useSearchParams()
   // console.log('keyword', searchParams)
-  const { data = {}, loading } = useLoadQuestionListData({ isDeleted: true })
+  const { data = {}, loading, refresh } = useLoadQuestionListData({ isDeleted: true })
   const { list = [], total = 0 } = data
   const [selectedIds, setSelectedIds] = useState<string[]>([])
+  //恢复
+  const { run: recover } = useRequest(
+    async () => {
+      for await (const id of selectedIds) {
+        await updateQuestionService(id, { isDeleted: false })
+      }
+    },
+    {
+      manual: true,
+      debounceWait: 500, // 防抖
+      onSuccess() {
+        message.success('恢复成功')
+        refresh()
+      },
+    }
+  )
   function del() {
     confirm({
       title: '确认彻底删除该问卷？',
@@ -52,7 +69,7 @@ const Trash: FC = () => {
     <>
       <div style={{ marginBottom: '16px' }}>
         <Space>
-          <Button type="primary" disabled={selectedIds.length === 0}>
+          <Button type="primary" disabled={selectedIds.length === 0} onClick={recover}>
             恢复
           </Button>
           <Button danger disabled={selectedIds.length === 0} onClick={del}>
