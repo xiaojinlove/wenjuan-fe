@@ -3,6 +3,7 @@ import styles from './EditCanvas.module.scss'
 import QuestionTitle from '../../../components/QuestionComponents/QuestionTitle/Component'
 import QuestionInput from '../../../components/QuestionComponents/QuestionInput/Component'
 import { Spin } from 'antd'
+import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 
 type PropsType = {
   loading: boolean
@@ -15,6 +16,9 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
       </div>
     )
   }
+  const { componentList } = useGetComponentInfo()
+  console.log(componentList)
+
   return (
     <div className={styles.canvas}>
       <div className={styles['component-wrapper']}>
