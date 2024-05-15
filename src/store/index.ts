@@ -7,5 +7,9 @@ export type StateType = {
 export default configureStore({
   reducer: {
     user: userReducer,
+
+    //组件列表
+
+    //问卷信息 title desc...
   },
 })
