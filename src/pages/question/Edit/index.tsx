@@ -4,7 +4,7 @@ import styles from './index.module.scss'
 import EditCanvas from './EditCanvas'
 
 const Edit: FC = () => {
-  const { loading, data } = useLoadQuestionData()
+  const { loading } = useLoadQuestionData()
   return (
     <div className={styles.container}>
       {/* 上布局 */}
@@ -18,7 +18,7 @@ const Edit: FC = () => {
           {/* 中 */}
           <div className={styles.main}>
             <div className={styles['canvas-wrapper']}>
-              <EditCanvas />
+              <EditCanvas loading={loading} />
             </div>
           </div>
           {/* 右 */}
