@@ -1,26 +1,36 @@
 import React, { FC } from 'react'
 import { Outlet } from 'react-router-dom'
-import { Layout } from 'antd'
+import { Layout, Spin } from 'antd'
 import styles from './MainLayout.module.scss'
 import Logo from '../components/Logo'
 import UserInfo from '../components/UserInfo'
+import useLoadUserData from '../hooks/useLoadUserData'
 
 const { Header, Content, Footer } = Layout
 
 const MainLayout: FC = () => {
+  const { waitingUserData } = useLoadUserData()
   return (
     <Layout>
       <Header className={styles.header}>
-        <div>
+        <div className={styles.left}>
           <Logo />
         </div>
-        <div>
+        <div className={styles.right}>
           <UserInfo />
         </div>
       </Header>
-      <Content className={styles.main}>
-        <Outlet />
-      </Content>
+      <Layout className={styles.main}>
+        <Content>
+          {waitingUserData ? (
+            <div style={{ textAlign: 'center', marginTop: '60px' }}>
+              <Spin />
+            </div>
+          ) : (
+            <Outlet />
+          )}
+        </Content>
+      </Layout>
       <Footer className={styles.footer}>小星问卷 &copy;2024 - present. Created by xinfeng</Footer>
     </Layout>
   )
