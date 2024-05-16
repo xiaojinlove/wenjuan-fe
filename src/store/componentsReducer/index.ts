@@ -28,9 +28,20 @@ export const componentsSlice = createSlice({
     changeSelectedId: (state: ComponentsStateType, action: PayloadAction<string>) => {
       state.selectedId = action.payload
     },
+    addComponent: (state: ComponentsStateType, action: PayloadAction<ComponentInfoType>) => {
+      const newComponent = action.payload
+      const { selectedId } = state
+      const index = state.componentList.findIndex(c => c.fe_id === selectedId)
+      if (index < 0) {
+        state.componentList.push(newComponent)
+      } else {
+        state.componentList.splice(index + 1, 0, newComponent)
+      }
+      state.selectedId = newComponent.fe_id
+    },
   },
 })
 
-export const { resetComponents, changeSelectedId } = componentsSlice.actions
+export const { resetComponents, changeSelectedId, addComponent } = componentsSlice.actions
 
 export default componentsSlice.reducer
