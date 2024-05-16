@@ -14,7 +14,7 @@ function genComponent(c: ComponentConfType) {
   function handleClick() {
     dispatch(
       addComponent({
-        fe_id: nanoid(5),
+        fe_id: nanoid(),
         title: title,
         type: type,
         props: defaultProps,
