@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { changeSelectedId } from '../../../store/componentsReducer'
 import LeftPanel from './LeftPanel'
 import RightPanel from './RightPanel'
+import EditHeader from './EditHeader'
 
 const Edit: FC = () => {
   const { loading } = useLoadQuestionData()
@@ -16,7 +17,7 @@ const Edit: FC = () => {
   return (
     <div className={styles.container}>
       {/* 上布局 */}
-      <div style={{ backgroundColor: '#fff', height: '40px' }}>Header</div>
+      <EditHeader />
       {/* 下布局 */}
       <div className={styles['content-wrapper']}>
         {/* 下布局的主体的容器 */}
