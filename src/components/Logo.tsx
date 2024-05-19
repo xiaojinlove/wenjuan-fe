@@ -17,7 +17,7 @@ const Logo: FC = () => {
     if (username) {
       setPathname(MANAGE_INDEX_PATHNAME)
     }
-  }, [pathname])
+  }, [username])
   return (
     <div className={styles.container}>
       <Link to={pathname}>

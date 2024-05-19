@@ -115,7 +115,7 @@ const List: FC = () => {
       </div>
       {/* 中 */}
       <div className={styles.content}>
-        问卷列表
+        {/* 问卷列表 */}
         {list.length > 0 &&
           list.map((item: any) => {
             return <QuestionCard key={item._id} {...item} />

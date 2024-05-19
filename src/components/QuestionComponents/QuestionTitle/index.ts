@@ -10,8 +10,8 @@ import { QuestionTitleDefaultProps } from './interface'
 export * from './interface'
 
 export default {
-  title: '输入框',
-  type: 'questionInput',
+  title: '标题',
+  type: 'questionTitle',
   Component,
   PropComponent,
   defaultProps: QuestionTitleDefaultProps,
