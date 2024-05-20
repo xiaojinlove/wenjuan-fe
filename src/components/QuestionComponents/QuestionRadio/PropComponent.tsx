@@ -1,7 +1,8 @@
 import React, { FC, useEffect } from 'react'
-import { QuestionRadioPropsType } from './interface'
+import { OptionType, QuestionRadioPropsType } from './interface'
 import { Form, Input, Checkbox, Select, Button, Space } from 'antd'
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons'
+import { nanoid } from 'nanoid'
 
 const PropComponent: FC<QuestionRadioPropsType> = (props: QuestionRadioPropsType) => {
   const { title, isVertical, options = [], value, onChange, disabled } = props
@@ -12,9 +13,22 @@ const PropComponent: FC<QuestionRadioPropsType> = (props: QuestionRadioPropsType
   }, [title, isVertical, options, value])
 
   function handleValuesChange() {
-    if (onChange) {
-      onChange(form.getFieldsValue())
+    if (onChange == null) return
+    // 触发 onChange 函数
+    const newValues = form.getFieldsValue() as QuestionRadioPropsType
+
+    if (newValues.options) {
+      // 需要清除 text undefined 的选项
+      newValues.options = newValues.options.filter(opt => !(opt.text == null))
     }
+
+    const { options = [] } = newValues
+    options.forEach(opt => {
+      if (opt.value) return
+      opt.value = nanoid(5) // 补齐 opt value
+    })
+
+    onChange(newValues)
   }
   return (
     <Form
@@ -42,7 +56,20 @@ const PropComponent: FC<QuestionRadioPropsType> = (props: QuestionRadioPropsType
                     {/* 当前选项 输入框 */}
                     <Form.Item
                       name={[name, 'text']}
-                      rules={[{ required: true, message: '请输入选项文字' }]}
+                      rules={[
+                        { required: true, message: '请输入选项文字' },
+                        {
+                          validator: (_, text) => {
+                            const { options = [] } = form.getFieldsValue()
+                            let num = 0
+                            options.forEach((opt: OptionType) => {
+                              if (opt.text === text) num++ // 记录 text 相同的个数，预期只有 1 个（自己）
+                            })
+                            if (num === 1) return Promise.resolve()
+                            return Promise.reject(new Error('和其他选项重复了'))
+                          },
+                        },
+                      ]}
                     >
                       <Input placeholder="输入选项文字..." />
                     </Form.Item>
