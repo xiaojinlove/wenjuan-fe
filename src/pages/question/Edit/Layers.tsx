@@ -3,8 +3,14 @@ import useGetComponentInfo from '../../../hooks/useGetComponentInfo'
 import styles from './Layers.module.scss'
 import classNames from 'classnames'
 import { useDispatch } from 'react-redux'
-import { Input, message } from 'antd'
-import { changeSelectedId, changeComponentTitle } from '../../../store/componentsReducer'
+import { Button, Input, Space, message } from 'antd'
+import {
+  changeSelectedId,
+  changeComponentTitle,
+  changeComponentHidden,
+  toggleComponentLocked,
+} from '../../../store/componentsReducer'
+import { EyeInvisibleOutlined, LockOutlined } from '@ant-design/icons'
 
 const Layers: FC = () => {
   const { componentList, selectedId } = useGetComponentInfo()
@@ -38,6 +44,16 @@ const Layers: FC = () => {
     dispatch(changeComponentTitle({ fe_id: selectedId, title: newTitle }))
   }
 
+  // 切换 隐藏/显示
+  function changeHidden(fe_id: string, isHidden: boolean) {
+    dispatch(changeComponentHidden({ fe_id, isHidden }))
+  }
+
+  // 切换 锁定/解锁
+  function changeLocked(fe_id: string) {
+    dispatch(toggleComponentLocked({ fe_id }))
+  }
+
   return (
     <>
       {componentList.map(c => {
@@ -64,7 +80,26 @@ const Layers: FC = () => {
               )}
               {fe_id !== changingTitleId && title}
             </div>
-            <div className={styles.handler}>按钮</div>
+            <div className={styles.handler}>
+              <Space>
+                <Button
+                  size="small"
+                  shape="circle"
+                  icon={<EyeInvisibleOutlined />}
+                  type={isHidden ? 'primary' : 'text'}
+                  className={!isHidden ? styles.btn : ''}
+                  onClick={() => changeHidden(fe_id, !isHidden)}
+                ></Button>
+                <Button
+                  size="small"
+                  shape="circle"
+                  icon={<LockOutlined />}
+                  type={isLocked ? 'primary' : 'text'}
+                  className={!isLocked ? styles.btn : ''}
+                  onClick={() => changeLocked(fe_id)}
+                ></Button>
+              </Space>
+            </div>
           </div>
         )
       })}
