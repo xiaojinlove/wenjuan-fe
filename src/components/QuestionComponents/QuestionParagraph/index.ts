@@ -2,7 +2,7 @@
  * @description 问卷 - 段落
  */
 
-import PropComponent from '../QuestionInput/PropComponent'
+import PropComponent from '../QuestionParagraph/PropComponent'
 import Component from './Component'
 import { QuestionParagraphDefaultProps } from './interface'
 
