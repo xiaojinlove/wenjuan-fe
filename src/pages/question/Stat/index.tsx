@@ -5,6 +5,7 @@ import useGetPageInfo from '../../../hooks/useGetPageInfo'
 import { useNavigate } from 'react-router-dom'
 import { useTitle } from 'ahooks'
 import styles from './index.module.scss'
+import StatHeader from './StatHeader'
 
 const Stat: FC = () => {
   const { loading } = useLoadQuestionData()
@@ -48,6 +49,7 @@ const Stat: FC = () => {
 
   return (
     <div className={styles.container}>
+      <StatHeader />
       <div className={styles['content-wrapper']}>
         {loading && LoadingELem}
         {!loading && <div className={styles.content}>{genContentElem()}</div>}
