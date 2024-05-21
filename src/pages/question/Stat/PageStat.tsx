@@ -68,6 +68,7 @@ const PageStat: FC<PropsType> = (props: PropsType) => {
     <>
       <Table columns={columns} dataSource={dataSource} pagination={false}></Table>
       <div style={{ textAlign: 'center', marginTop: '18px' }}>
+        {/* 分页 */}
         <Pagination
           total={total}
           pageSize={pageSize}
