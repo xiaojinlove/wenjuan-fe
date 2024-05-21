@@ -26,7 +26,14 @@ function useLoadQuestionData() {
   useEffect(() => {
     if (!data) return
 
-    const { title = '', componentList = [], js = '', css = '', desc = '' } = data
+    const {
+      title = '',
+      componentList = [],
+      js = '',
+      css = '',
+      desc = '',
+      isPublished = false,
+    } = data
     let selectedId = ''
     if (componentList.length > 0) {
       selectedId = componentList[0].fe_id
@@ -36,7 +43,7 @@ function useLoadQuestionData() {
     dispatch(resetComponents({ componentList, selectedId: '', copiedComponent: null }))
 
     // 吧 pageInfo 存储到 redux store
-    dispatch(resetPageInfo({ title, desc, js, css }))
+    dispatch(resetPageInfo({ title, desc, js, css, isPublished }))
   }, [data])
 
   // 判断 id 变化，执行 ajax 加载问卷数据
