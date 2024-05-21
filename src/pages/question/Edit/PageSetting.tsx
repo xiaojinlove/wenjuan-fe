@@ -1,16 +1,32 @@
 import React, { FC, useEffect } from 'react'
 import { Form, Input } from 'antd'
 import { useDispatch } from 'react-redux'
+import useGetPageInfo from '../../../hooks/useGetPageInfo'
+import { resetPageInfo } from '../../../store/pageInfoReducer'
 
 const { TextArea } = Input
 
 const PageSetting: FC = () => {
+  const pageInfo = useGetPageInfo()
   // const { title, desc, js, css } = pageInfo
   const [form] = Form.useForm()
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    form.setFieldsValue(pageInfo)
+  }, [pageInfo])
+
+  function handleValuesChange() {
+    //console.log('newValues', form.getFieldsValue())
+    dispatch(resetPageInfo(form.getFieldsValue()))
+  }
   return (
-    <Form layout="vertical" form={form}>
+    <Form
+      layout="vertical"
+      form={form}
+      initialValues={pageInfo}
+      onValuesChange={handleValuesChange}
+    >
       <Form.Item label="问卷标题" name="title" rules={[{ required: true, message: '请输入标题' }]}>
         <Input placeholder="请输入标题" />
       </Form.Item>
