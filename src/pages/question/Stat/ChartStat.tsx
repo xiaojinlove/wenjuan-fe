@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { Typography } from 'antd'
-import PieDemo from './PieDemo'
+// import PieDemo from './PieDemo'
+import BarDemo from './BarDemo'
 
 const { Title } = Typography
 type PropsType = {
@@ -13,7 +14,7 @@ const ChartStat: FC<PropsType> = (props: PropsType) => {
     <>
       <Title level={3}>图表统计</Title>
       <div>
-        <PieDemo />
+        <BarDemo />
       </div>
     </>
   )
