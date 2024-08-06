@@ -4,7 +4,10 @@ import QuestionTitleConf, { QuestionTitlePropsType } from './QuestionTitle/index
 import QuestionParagraphConf, { QuestionParagraphPropsType } from './QuestionParagraph/index'
 import QuestionInfoConf, { QuestionInfoPropsType } from './QuestionInfo/index'
 import QuestionTextareaConf, { QuestionTextareaPropsType } from './QuestionTextarea/index'
-import QuestionRadioConf, { QuestionRadioPropsType } from './QuestionRadio/index'
+import QuestionRadioConf, {
+  QuestionRadioPropsType,
+  QuestionRadioStatPropsType,
+} from './QuestionRadio/index'
 import QuestionCheckboxConf, { QuestionCheckboxPropsType } from './QuestionCheckbox/index'
 
 //各个组件的 props type
@@ -16,13 +19,17 @@ export type ComponentPropsType = QuestionTitlePropsType &
   QuestionRadioPropsType &
   QuestionCheckboxPropsType
 
-//组件的配置
+// 统一各个组件的统计属性类型
+type ComponentStatPropsType = QuestionRadioStatPropsType
+
+//组件的配置 type
 export type ComponentConfType = {
   title: string
   type: string
   Component: FC<ComponentPropsType>
   PropComponent: FC<ComponentPropsType>
   defaultProps: ComponentPropsType
+  StatComponent?: FC<ComponentStatPropsType>
 }
 
 //全部组件配置的列表
