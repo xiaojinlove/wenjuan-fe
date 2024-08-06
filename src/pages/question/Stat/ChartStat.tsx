@@ -5,6 +5,7 @@ import { useRequest } from 'ahooks'
 // import BarDemo from './BarDemo'
 import { getComponentStatService } from '../../../services/stat'
 import { useParams } from 'react-router-dom'
+import { getComponentConfByType } from '../../../components/QuestionComponents'
 
 const { Title } = Typography
 type PropsType = {
@@ -31,7 +32,10 @@ const ChartStat: FC<PropsType> = (props: PropsType) => {
 
   function getStatElem() {
     if (!selectedComponentId) return <div>未选中组件</div>
-    return <div>{JSON.stringify(stat)}</div>
+
+    const { StatComponent } = getComponentConfByType(selectedComponentType) || {}
+    if (StatComponent == null) return <div>该组件无统计图表</div>
+    return <StatComponent stat={stat} />
   }
   return (
     <>
