@@ -11,7 +11,8 @@ const { Title } = Typography
 function genComponent(c: ComponentConfType) {
   const { title, type, Component, defaultProps } = c
   const dispatch = useDispatch()
-  function handleClick() {
+
+  const handleClick = useCallback(() => {
     dispatch(
       addComponent({
         fe_id: nanoid(),
@@ -20,7 +21,8 @@ function genComponent(c: ComponentConfType) {
         props: defaultProps,
       })
     )
-  }
+  }, [])
+
   return (
     <div key={type} className={styles.wrapper} onClick={handleClick}>
       <div className={styles.component}>
